@@ -21,15 +21,20 @@ public class PostService {
         return postRepository.findById(id);
     }
 
+    public void addPost (Post post) {
+        postRepository.save(post);
+    }
+
     public void putPost(Long id, PostDTO postDTO) {
-        Optional<Post> post = postRepository.findById(id);
-        post.orElseThrow().setDescription(postDTO.getDescription());
-        post.orElseThrow().setTitle(postDTO.getTitle());
-        return;
+        Optional<Post> idPost = postRepository.findById(id);
+        idPost.orElseThrow().setDescription(postDTO.getDescription());
+        idPost.orElseThrow().setTitle(postDTO.getTitle());
+
+        Post existingPost = idPost.orElseThrow();
+        postRepository.save(existingPost);
     }
 
     public void delPost (Long id) {
         postRepository.deleteById(id);
-        return;
     }
 }
