@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Tag(name =  "CRUD", description = "게시글 추가, 조회, 삭제, 수정")
+@Tag(name =  "게시판", description = "게시글 추가, 조회, 삭제, 수정")
 @RestController
-@RequestMapping("/users")
-public class CRUDController {
+@RequestMapping("/post")
+public class POSTController {
     @Autowired
     private PostService postService;
 
@@ -36,6 +36,7 @@ public class CRUDController {
     @Operation(summary = "게시글 추가", description = "게시글을 추가합니다.")
     public String addPost (@RequestBody PostDTO postDTO) {
         Post post = postDTO.toEntity();
+        postService.addPost(post);
         return "";
     }
 
