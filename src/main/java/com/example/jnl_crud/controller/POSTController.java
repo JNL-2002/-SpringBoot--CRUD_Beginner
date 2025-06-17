@@ -3,6 +3,7 @@ package com.example.jnl_crud.controller;
 import com.example.jnl_crud.dto.PostDTO;
 import com.example.jnl_crud.entity.Post;
 import com.example.jnl_crud.service.PostService;
+import com.example.jnl_crud.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import java.util.Optional;
 public class POSTController {
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping("/")
@@ -34,10 +38,19 @@ public class POSTController {
 
     @PostMapping("/")
     @Operation(summary = "게시글 추가", description = "게시글을 추가합니다.")
-    public String addPost (@RequestBody PostDTO postDTO) {
-        Post post = postDTO.toEntity();
-        postService.addPost(post);
-        return "";
+    public String addPost (
+            @RequestBody PostDTO postDTO,
+            @RequestParam String user_id,
+            @RequestParam String password
+            ) {
+
+        if (!userService.getData(user_id, password).isEmpty()) {
+            Post post = postDTO.toEntity();
+            postService.addPost(post);
+            return "게시글 작성이 완료되었습니다.";
+        } else {
+            return "회원이 아닙니다.";
+        }
     }
 
     @PutMapping("/{id}")
