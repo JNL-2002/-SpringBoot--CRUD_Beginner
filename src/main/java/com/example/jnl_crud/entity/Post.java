@@ -13,6 +13,7 @@ import lombok.*;
 @Setter
 @ToString
 public class Post {
+
     @Id
     @GeneratedValue
     private Long id;

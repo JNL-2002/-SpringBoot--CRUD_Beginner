@@ -17,36 +17,29 @@ public class USERController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("/join")
     @Operation(summary = "회원 가입", description = "회원가입을 진행합니다.")
     public String account (@RequestBody UserDTO userDTO) {
-        User user = userDTO.toEntity();
-
-        if (userService.account(user) == 0) {
-            return "중복된 아이디입니다.";
-        } else {
-            return "회원가입을 환영합니다.";
-        }
+        return userService.account(userDTO);
     }
 
     @GetMapping("/getData")
-    @Operation(summary = "회원 조회", description = "회원을 조회합니다.")
+    @Operation(summary = "회원 조회", description = "회원을 조회합니다. (ADMIN)")
     public String getData (
-            @RequestParam String user_id,
-            @RequestParam String password
+            @RequestParam String user_id
             ) {
+        List <User> userData = userService.findByUsers(user_id);
 
-        if (!userService.getData(user_id, password).isEmpty()) {
-            return "회원입니다.";
-        } else {
-            return "회원이 아닙니다.";
+        if (!userData.isEmpty()) {
+            return userData.toString();
         }
+        return "비어있습니다.";
     }
 
     // 로그인은 추후 개발
-//    @PostMapping("/login")
-//    @Operation(summary = "로그인", description = "로그인을 진행합니다.")
-//    public String login (@RequestBody UserDTO userDTO) {
-//
-//    }
+    @PostMapping("/login")
+    @Operation(summary = "로그인", description = "로그인을 진행합니다.")
+    public String login (@RequestBody UserDTO userDTO) {
+        return "";
+   }
 }

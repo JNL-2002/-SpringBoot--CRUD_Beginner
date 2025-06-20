@@ -1,8 +1,10 @@
 package com.example.jnl_crud.service;
 
+import com.example.jnl_crud.dto.UserDTO;
 import com.example.jnl_crud.entity.User;
 import com.example.jnl_crud.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,27 +15,27 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public int account (User user) {
-        Iterable<User> allUsers = userRepository.findAll();
-        for (User a: allUsers) {
-            if(a.getUser_id().equals(user.getUser_id())) {
-                return 0;
-            }
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+    public String account (UserDTO userDTO) {
+        boolean isUser = userRepository.existsByUserId(userDTO.getUserId());
+        if (isUser) {
+            return "아이디가 존재합니다.";
         }
-        userRepository.save(user);
-        return 1;
+
+        User userEntity = new User();
+
+        userEntity.setName(userDTO.getName());
+        userEntity.setUserId(userDTO.getUserId());
+        userEntity.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        userRepository.save(userEntity);
+        return "회원가입이 완료되었습니다.";
     }
 
-    public List<String> getData (String user_id, String password) {
-        Iterable<User> allUsers = userRepository.findAll();
-        List<String> arr = new ArrayList<>();
-        for(User a: allUsers) {
-            if (a.getUser_id().equals(user_id) && a.getPassword().equals(password)) {
-                arr.add(String.valueOf(a));
-            }
-        }
-        return arr;
+    public List<User> findByUsers (String userId) {
+        return userRepository.findByUserId(userId);
     }
-
-    }
+}
 
