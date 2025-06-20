@@ -8,10 +8,6 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
     private String name;
-    private String user_id;
+    private String userId;
     private String password;
-
-    public User toEntity() {
-        return new User(null,name, user_id, password);
-    }
 }

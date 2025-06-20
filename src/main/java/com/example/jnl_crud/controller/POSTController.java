@@ -44,13 +44,7 @@ public class POSTController {
             @RequestParam String password
             ) {
 
-        if (!userService.getData(user_id, password).isEmpty()) {
-            Post post = postDTO.toEntity();
-            postService.addPost(post);
             return "게시글 작성이 완료되었습니다.";
-        } else {
-            return "회원이 아닙니다.";
-        }
     }
 
     @PutMapping("/{id}")
