@@ -23,23 +23,11 @@ public class USERController {
         return userService.account(userDTO);
     }
 
-    @GetMapping("/getData")
-    @Operation(summary = "회원 조회", description = "회원을 조회합니다. (ADMIN)")
-    public String getData (
-            @RequestParam String user_id
-            ) {
-        List <User> userData = userService.findByUsers(user_id);
 
-        if (!userData.isEmpty()) {
-            return userData.toString();
-        }
-        return "비어있습니다.";
-    }
-
-    // 로그인은 추후 개발
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인을 진행합니다.")
     public String login (@RequestBody UserDTO userDTO) {
+        userService.login(userDTO);
         return "";
    }
 }
